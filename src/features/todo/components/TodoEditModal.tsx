@@ -40,7 +40,12 @@ export function TodoEditModal({
   );
 
   return (
-    <Modal title="TODO編集" open={visible} onCancel={onClose} footer={footer}>
+    <Modal
+      title="TODO編集"
+      open={visible}
+      onCancel={onClose}
+      footer={footer}
+    >
       <Form layout="vertical">
         <Form.Item label="タイトル">
           <Input

@@ -102,7 +102,15 @@ export function TodoMemo() {
   const completedCount = todos.filter((todo) => todo.completed).length;
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
+    <div
+      style={{
+        padding: "24px",
+        width: "100%",
+        margin: "0 auto",
+        minHeight: "100vh",
+        position: "relative",
+      }}
+    >
       <Title level={2}>TODO管理アプリ</Title>
 
       <AddForm

@@ -27,9 +27,13 @@ export function TodoCard({
 
   const cardStyle = useMemo(
     () => ({
-      height: "100%",
+      minHeight: "160px",
+      maxHeight: "200px",
+      width: "100%",
+      maxWidth: "280px",
       opacity: todo.completed ? 0.6 : 1,
       textDecoration: todo.completed ? "line-through" : "none",
+      overflow: "auto",
     }),
     [todo.completed]
   );
@@ -55,10 +59,7 @@ export function TodoCard({
     [handleView, handleEdit, handleDelete]
   );
 
-  const truncatedDescription =
-    todo.description.length > 50
-      ? `${todo.description.substring(0, 50)}...`
-      : todo.description;
+  const fullDescription = todo.description;
 
   const formattedDate = todo.createdAt.toLocaleDateString("ja-JP");
 
@@ -69,16 +70,29 @@ export function TodoCard({
           display: "flex",
           alignItems: "flex-start",
           gap: "8px",
+          height: "100%", // 親の高さに合わせる
         }}
       >
         <Checkbox checked={todo.completed} onChange={handleToggle} />
-        <div style={{ flex: 1 }}>
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            height: "100%",
+            overflow: "hidden",
+          }}
+        >
           <Text
             strong={!todo.completed}
             style={{
               fontSize: "16px",
               display: "block",
               marginBottom: "8px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             {todo.title}
@@ -88,16 +102,22 @@ export function TodoCard({
             style={{
               fontSize: "12px",
               display: "block",
+              minHeight: "28px",
+              maxHeight: "48px",
+              overflow: "auto",
+              lineHeight: "1.3",
             }}
           >
-            {truncatedDescription}
+            {fullDescription}
           </Text>
           <Text
             type="secondary"
             style={{
               fontSize: "10px",
               display: "block",
-              marginTop: "4px",
+              marginTop: "auto",
+              paddingTop: "2px",
+              marginBottom: "0px",
             }}
           >
             {formattedDate}

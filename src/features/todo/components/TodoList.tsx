@@ -18,9 +18,19 @@ export function TodoList({
   onDelete,
 }: TodoListProps) {
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[16, 16]} style={{ minHeight: "400px" }}>
       {todos.map((todo) => (
-        <Col xs={24} sm={12} lg={8} xl={6} key={todo.id}>
+        <Col
+          xs={24}
+          sm={12}
+          lg={8}
+          xl={6}
+          key={todo.id}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <TodoCard
             todo={todo}
             onToggle={onToggle}

@@ -23,6 +23,8 @@ export function TodoPagination({
     marginBottom: "8px",
     display: "flex",
     justifyContent: "flex-end",
+    height: "40px",
+    alignItems: "center",
   };
 
   return (
@@ -33,8 +35,10 @@ export function TodoPagination({
         pageSize={pageSize}
         onChange={handleChange}
         showSizeChanger={false}
-        showQuickJumper
+        showQuickJumper={false} // クイックジャンパーを無効化
         showTotal={showTotal}
+        size="small" // サイズを固定
+        simple={false} // シンプルモードを無効化
       />
     </div>
   );

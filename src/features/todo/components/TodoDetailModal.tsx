@@ -33,7 +33,12 @@ export function TodoDetailModal({
   }, [todo?.completed]);
 
   return (
-    <Modal title="TODO詳細" open={visible} onCancel={onClose} footer={footer}>
+    <Modal
+      title="TODO詳細"
+      open={visible}
+      onCancel={onClose}
+      footer={footer}
+    >
       {todo && (
         <div>
           <Title level={4}>{todo.title}</Title>

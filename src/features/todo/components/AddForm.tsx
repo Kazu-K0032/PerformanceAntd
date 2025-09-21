@@ -23,7 +23,10 @@ export function AddForm({
     setNewDescription(e.target.value);
 
   return (
-    <Card title="新しいTODOを追加" style={{ marginBottom: "24px" }}>
+    <Card
+      title="新しいTODOを追加"
+      style={{ marginBottom: "24px", width: "100%" }}
+    >
       <Space direction="vertical" style={{ width: "100%" }}>
         <Input
           placeholder="TODOのタイトルを入力"
