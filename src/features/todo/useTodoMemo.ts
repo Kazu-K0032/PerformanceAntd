@@ -1,19 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TodoItem, mockTodos } from "./TodoMemo.mock";
 
 export const useTodoMemo = () => {
-  const [todos, setTodos] = useState<TodoItem[]>(
-    mockTodos.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-  );
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editingTodo, setEditingTodo] = useState<TodoItem | null>(null);
+
+  // 初期データの読み込みをシミュレート
+  useEffect(() => {
+    const loadTodos = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const sortedTodos = mockTodos.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+
+      setTodos(sortedTodos);
+      setIsLoading(false);
+    };
+
+    loadTodos();
+  }, []);
 
   /**
    * 新しいTODOを追加する
@@ -104,6 +117,7 @@ export const useTodoMemo = () => {
 
   return {
     todos,
+    isLoading,
     selectedTodo,
     editingTodo,
     isDetailModalVisible,

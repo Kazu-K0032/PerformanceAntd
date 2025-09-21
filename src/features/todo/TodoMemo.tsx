@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { Typography, message } from "antd";
 import { useTodoMemo } from "./useTodoMemo";
 import { TodoItem } from "./TodoMemo.mock";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   AddForm,
   TodoList,
@@ -18,6 +19,7 @@ const { Title } = Typography;
 export function TodoMemo() {
   const {
     todos,
+    isLoading,
     selectedTodo,
     editingTodo,
     isDetailModalVisible,
@@ -100,6 +102,24 @@ export function TodoMemo() {
 
   // 完了済みTODO数の計算
   const completedCount = todos.filter((todo) => todo.completed).length;
+
+  // ローディング中の表示
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          padding: "24px",
+          width: "100%",
+          margin: "0 auto",
+          minHeight: "100vh",
+          position: "relative",
+        }}
+      >
+        <Title level={2}>TODO管理アプリ</Title>
+        <LoadingSpinner tip="TODOデータを読み込み中..." />
+      </div>
+    );
+  }
 
   return (
     <div
