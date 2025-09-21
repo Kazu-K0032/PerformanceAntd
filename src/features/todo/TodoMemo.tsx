@@ -14,6 +14,7 @@ import {
   Row,
   Col,
   message,
+  Pagination,
 } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useTodoMemo } from "./useTodoMemo";
@@ -43,6 +44,8 @@ export function TodoMemo() {
   const [newDescription, setNewDescription] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 8;
 
   const handleAddTodo = () => {
     if (!newTitle.trim()) {
@@ -82,6 +85,16 @@ export function TodoMemo() {
     message.success(`${completedCount}個の完了済みTODOを削除しました`);
   };
 
+  // ページネーション用のデータ計算
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const currentTodos = todos.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(todos.length / pageSize);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
       <Title level={2}>TODO管理アプリ</Title>
@@ -118,9 +131,22 @@ export function TodoMemo() {
         </Button>
       </div>
 
+      {/* ページネーション */}
+      <div style={{ marginTop: "24px", marginBottom: "8px", display: "flex", justifyContent: "flex-end" }}>
+        <Pagination
+          current={currentPage}
+          total={todos.length}
+          pageSize={pageSize}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+          showQuickJumper
+          showTotal={(total, range) => `${range[0]}-${range[1]} / ${total} 件`}
+        />
+      </div>
+
       {/* TODO一覧 */}
       <Row gutter={[16, 16]}>
-        {todos.map((todo) => (
+        {currentTodos.map((todo) => (
           <Col xs={24} sm={12} lg={8} xl={6} key={todo.id}>
             <Card
               hoverable
