@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Typography, message } from "antd";
 import { useTodoMemo } from "./useTodoMemo";
 import { TodoItem } from "./TodoMemo.mock";
@@ -39,7 +39,7 @@ export function TodoMemo() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 8;
 
-  const handleAddTodo = () => {
+  const handleAddTodo = useCallback(() => {
     if (!newTitle.trim()) {
       message.warning("タイトルを入力してください");
       return;
@@ -48,15 +48,18 @@ export function TodoMemo() {
     setNewTitle("");
     setNewDescription("");
     message.success("TODOを追加しました");
-  };
+  }, [newTitle, newDescription, addTodo, setNewTitle, setNewDescription]);
 
-  const handleEditTodo = (todo: TodoItem) => {
-    setEditTitle(todo.title);
-    setEditDescription(todo.description);
-    editTodo(todo);
-  };
+  const handleEditTodo = useCallback(
+    (todo: TodoItem) => {
+      setEditTitle(todo.title);
+      setEditDescription(todo.description);
+      editTodo(todo);
+    },
+    [setEditTitle, setEditDescription, editTodo]
+  );
 
-  const handleUpdateTodo = () => {
+  const handleUpdateTodo = useCallback(() => {
     if (!editTitle.trim()) {
       message.warning("タイトルを入力してください");
       return;
@@ -65,9 +68,9 @@ export function TodoMemo() {
       updateTodo(editingTodo.id, editTitle, editDescription);
       message.success("TODOを更新しました");
     }
-  };
+  }, [editTitle, editDescription, editingTodo, updateTodo]);
 
-  const handleDeleteCompleted = () => {
+  const handleDeleteCompleted = useCallback(() => {
     const completedCount = todos.filter((todo) => todo.completed).length;
     if (completedCount === 0) {
       message.info("完了済みのTODOがありません");
@@ -75,17 +78,28 @@ export function TodoMemo() {
     }
     deleteCompletedTodos();
     message.success(`${completedCount}個の完了済みTODOを削除しました`);
-  };
+  }, [todos, deleteCompletedTodos]);
 
   // ページネーション用のデータ計算
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const currentTodos = todos.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(todos.length / pageSize);
+  const paginationData = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return {
+      startIndex,
+      endIndex,
+      currentTodos: todos.slice(startIndex, endIndex),
+      totalPages: Math.ceil(todos.length / pageSize),
+    };
+  }, [currentPage, pageSize, todos]);
 
-  const handlePageChange = (page: number) => {
+  const { currentTodos } = paginationData;
+
+  const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
-  };
+  }, []);
+
+  // 完了済みTODO数の計算
+  const completedCount = todos.filter((todo) => todo.completed).length;
 
   return (
     <div style={{ padding: "24px", maxWidth: "1200px", margin: "0 auto" }}>
@@ -100,7 +114,7 @@ export function TodoMemo() {
       />
 
       <ActionButtons
-        completedCount={todos.filter((todo) => todo.completed).length}
+        completedCount={completedCount}
         onDeleteCompleted={handleDeleteCompleted}
       />
 

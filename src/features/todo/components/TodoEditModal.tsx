@@ -1,4 +1,5 @@
 import { Modal, Form, Input, Button } from "antd";
+import { useMemo } from "react";
 
 const { TextArea } = Input;
 
@@ -21,32 +22,37 @@ export function TodoEditModal({
   onClose,
   onUpdate,
 }: TodoEditModalProps) {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEditTitle(e.target.value);
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setEditDescription(e.target.value);
+
+  const footer = useMemo(
+    () => [
+      <Button key="cancel" onClick={onClose}>
+        キャンセル
+      </Button>,
+      <Button key="update" type="primary" onClick={onUpdate}>
+        変更
+      </Button>,
+    ],
+    [onClose, onUpdate]
+  );
+
   return (
-    <Modal
-      title="TODO編集"
-      open={visible}
-      onCancel={onClose}
-      footer={[
-        <Button key="cancel" onClick={onClose}>
-          キャンセル
-        </Button>,
-        <Button key="update" type="primary" onClick={onUpdate}>
-          変更
-        </Button>,
-      ]}
-    >
+    <Modal title="TODO編集" open={visible} onCancel={onClose} footer={footer}>
       <Form layout="vertical">
         <Form.Item label="タイトル">
           <Input
             value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
+            onChange={handleTitleChange}
             placeholder="TODOのタイトルを入力"
           />
         </Form.Item>
         <Form.Item label="詳細">
           <TextArea
             value={editDescription}
-            onChange={(e) => setEditDescription(e.target.value)}
+            onChange={handleDescriptionChange}
             placeholder="TODOの詳細を入力"
             rows={4}
           />

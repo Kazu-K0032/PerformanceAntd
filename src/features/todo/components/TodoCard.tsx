@@ -1,5 +1,6 @@
 import { Card, Checkbox, Typography } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { useMemo } from "react";
 import { TodoItem } from "../TodoMemo.mock";
 
 const { Text } = Typography;
@@ -19,32 +20,50 @@ export function TodoCard({
   onEdit,
   onDelete,
 }: TodoCardProps) {
+  const handleToggle = () => onToggle(todo.id);
+  const handleView = () => onView(todo);
+  const handleEdit = () => onEdit(todo);
+  const handleDelete = () => onDelete(todo.id);
+
+  const cardStyle = useMemo(
+    () => ({
+      height: "100%",
+      opacity: todo.completed ? 0.6 : 1,
+      textDecoration: todo.completed ? "line-through" : "none",
+    }),
+    [todo.completed]
+  );
+
+  const actions = useMemo(
+    () => [
+      <EyeOutlined
+        key="view"
+        onClick={handleView}
+        style={{ color: "#1890ff" }}
+      />,
+      <EditOutlined
+        key="edit"
+        onClick={handleEdit}
+        style={{ color: "#52c41a" }}
+      />,
+      <DeleteOutlined
+        key="delete"
+        onClick={handleDelete}
+        style={{ color: "#ff4d4f" }}
+      />,
+    ],
+    [handleView, handleEdit, handleDelete]
+  );
+
+  const truncatedDescription =
+    todo.description.length > 50
+      ? `${todo.description.substring(0, 50)}...`
+      : todo.description;
+
+  const formattedDate = todo.createdAt.toLocaleDateString("ja-JP");
+
   return (
-    <Card
-      hoverable
-      style={{
-        height: "100%",
-        opacity: todo.completed ? 0.6 : 1,
-        textDecoration: todo.completed ? "line-through" : "none",
-      }}
-      actions={[
-        <EyeOutlined
-          key="view"
-          onClick={() => onView(todo)}
-          style={{ color: "#1890ff" }}
-        />,
-        <EditOutlined
-          key="edit"
-          onClick={() => onEdit(todo)}
-          style={{ color: "#52c41a" }}
-        />,
-        <DeleteOutlined
-          key="delete"
-          onClick={() => onDelete(todo.id)}
-          style={{ color: "#ff4d4f" }}
-        />,
-      ]}
-    >
+    <Card hoverable style={cardStyle} actions={actions}>
       <div
         style={{
           display: "flex",
@@ -52,7 +71,7 @@ export function TodoCard({
           gap: "8px",
         }}
       >
-        <Checkbox checked={todo.completed} onChange={() => onToggle(todo.id)} />
+        <Checkbox checked={todo.completed} onChange={handleToggle} />
         <div style={{ flex: 1 }}>
           <Text
             strong={!todo.completed}
@@ -71,9 +90,7 @@ export function TodoCard({
               display: "block",
             }}
           >
-            {todo.description.length > 50
-              ? `${todo.description.substring(0, 50)}...`
-              : todo.description}
+            {truncatedDescription}
           </Text>
           <Text
             type="secondary"
@@ -83,7 +100,7 @@ export function TodoCard({
               marginTop: "4px",
             }}
           >
-            {todo.createdAt.toLocaleDateString("ja-JP")}
+            {formattedDate}
           </Text>
         </div>
       </div>

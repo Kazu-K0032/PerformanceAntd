@@ -17,19 +17,24 @@ export function AddForm({
   setNewDescription,
   handleAddTodo,
 }: AddFormProps) {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setNewTitle(e.target.value);
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setNewDescription(e.target.value);
+
   return (
     <Card title="新しいTODOを追加" style={{ marginBottom: "24px" }}>
       <Space direction="vertical" style={{ width: "100%" }}>
         <Input
           placeholder="TODOのタイトルを入力"
           value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
+          onChange={handleTitleChange}
           onPressEnter={handleAddTodo}
         />
         <TextArea
           placeholder="TODOの詳細を入力（任意）"
           value={newDescription}
-          onChange={(e) => setNewDescription(e.target.value)}
+          onChange={handleDescriptionChange}
           rows={3}
         />
         <Button type="primary" onClick={handleAddTodo}>
