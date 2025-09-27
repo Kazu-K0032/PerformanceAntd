@@ -1,6 +1,6 @@
 import { Modal, Typography, Divider, Button } from "antd";
 import { useMemo } from "react";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/date.utils";
 import { TodoItem } from "../TodoMemo.types";
 
 const { Title, Text } = Typography;

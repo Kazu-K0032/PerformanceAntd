@@ -3,4 +3,4 @@ export type {
   TaskType as TodoItem,
   CreateTaskRequest as CreateTaskInput,
   UpdateTaskRequest as UpdateTaskInput,
-} from "@/types/task.type";
+} from "@/types/task.types";

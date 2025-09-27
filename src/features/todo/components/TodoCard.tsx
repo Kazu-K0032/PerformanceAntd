@@ -1,7 +1,7 @@
 import { Card, Checkbox, Typography } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
-import { formatDate } from "@/utils/date";
+import { formatDate } from "@/utils/date.utils";
 import { TodoItem } from "../TodoMemo.types";
 
 const { Text } = Typography;

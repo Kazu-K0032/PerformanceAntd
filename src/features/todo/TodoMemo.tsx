@@ -2,13 +2,9 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { Typography, message } from "antd";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useTodoMemo } from "./useTodoMemo";
 import { TodoItem } from "./TodoMemo.types";
-
-interface TodoMemoProps {
-  accountId?: string;
-}
-import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   AddForm,
   TodoList,
@@ -19,6 +15,10 @@ import {
 } from "./components";
 
 const { Title } = Typography;
+
+interface TodoMemoProps {
+  accountId?: string;
+}
 
 export function TodoMemo({ accountId }: TodoMemoProps) {
   const {
@@ -78,7 +78,9 @@ export function TodoMemo({ accountId }: TodoMemoProps) {
   }, [editTitle, editDescription, editingTodo, updateTodo]);
 
   const handleDeleteCompleted = useCallback(() => {
-    const completedCount = todos.filter((todo) => todo.completed).length;
+    const completedCount = todos.filter(
+      (todo) => todo.status === "DONE"
+    ).length;
     if (completedCount === 0) {
       message.info("完了済みのTODOがありません");
       return;

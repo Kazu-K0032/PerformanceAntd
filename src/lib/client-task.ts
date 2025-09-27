@@ -5,7 +5,7 @@ import {
   GetTasksResponse,
   CreateTaskResponse,
   UpdateTaskResponse,
-} from "@/types/task.type";
+} from "@/types/task.types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 

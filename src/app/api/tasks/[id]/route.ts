@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { UpdateTaskRequest } from "@/types/task.type";
+import { UpdateTaskRequest } from "@/types/task.types";
 
 export async function GET(
   request: NextRequest,
