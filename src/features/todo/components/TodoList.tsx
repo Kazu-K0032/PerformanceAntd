@@ -1,5 +1,5 @@
 import { Row, Col } from "antd";
-import { TodoItem } from "../TodoMemo.mock";
+import { TodoItem } from "../TodoMemo.types";
 import { TodoCard } from "./TodoCard";
 
 interface TodoListProps {

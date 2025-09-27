@@ -1,7 +1,8 @@
 import { Card, Checkbox, Typography } from "antd";
 import { EditOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
-import { TodoItem } from "../TodoMemo.mock";
+import { formatDate } from "@/utils/date";
+import { TodoItem } from "../TodoMemo.types";
 
 const { Text } = Typography;
 
@@ -31,11 +32,11 @@ export function TodoCard({
       maxHeight: "200px",
       width: "100%",
       maxWidth: "280px",
-      opacity: todo.completed ? 0.6 : 1,
-      textDecoration: todo.completed ? "line-through" : "none",
+      opacity: todo.status === "DONE" ? 0.6 : 1,
+      textDecoration: todo.status === "DONE" ? "line-through" : "none",
       overflow: "auto",
     }),
-    [todo.completed]
+    [todo.status]
   );
 
   const actions = useMemo(
@@ -61,7 +62,7 @@ export function TodoCard({
 
   const fullDescription = todo.description;
 
-  const formattedDate = todo.createdAt.toLocaleDateString("ja-JP");
+  const formattedDate = formatDate(todo.createdAt, { format: "date" });
 
   return (
     <Card hoverable style={cardStyle} actions={actions}>
@@ -70,10 +71,10 @@ export function TodoCard({
           display: "flex",
           alignItems: "flex-start",
           gap: "8px",
-          height: "100%", // 親の高さに合わせる
+          height: "100%",
         }}
       >
-        <Checkbox checked={todo.completed} onChange={handleToggle} />
+        <Checkbox checked={todo.status === "DONE"} onChange={handleToggle} />
         <div
           style={{
             flex: 1,
@@ -85,7 +86,7 @@ export function TodoCard({
           }}
         >
           <Text
-            strong={!todo.completed}
+            strong={todo.status !== "DONE"}
             style={{
               fontSize: "16px",
               display: "block",

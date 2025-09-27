@@ -1,6 +1,7 @@
 import { Modal, Typography, Divider, Button } from "antd";
 import { useMemo } from "react";
-import { TodoItem } from "../TodoMemo.mock";
+import { formatDate } from "@/utils/date";
+import { TodoItem } from "../TodoMemo.types";
 
 const { Title, Text } = Typography;
 
@@ -25,20 +26,17 @@ export function TodoDetailModal({
   );
 
   const formattedDate = useMemo(() => {
-    return todo?.createdAt.toLocaleString("ja-JP") || "";
+    return todo?.createdAt
+      ? formatDate(todo.createdAt, { format: "datetime" })
+      : "";
   }, [todo?.createdAt]);
 
   const statusText = useMemo(() => {
-    return todo?.completed ? "完了" : "未完了";
-  }, [todo?.completed]);
+    return todo?.status === "DONE" ? "完了" : "未完了";
+  }, [todo?.status]);
 
   return (
-    <Modal
-      title="TODO詳細"
-      open={visible}
-      onCancel={onClose}
-      footer={footer}
-    >
+    <Modal title="TODO詳細" open={visible} onCancel={onClose} footer={footer}>
       {todo && (
         <div>
           <Title level={4}>{todo.title}</Title>

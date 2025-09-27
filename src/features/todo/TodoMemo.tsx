@@ -3,7 +3,11 @@
 import { useState, useCallback, useMemo } from "react";
 import { Typography, message } from "antd";
 import { useTodoMemo } from "./useTodoMemo";
-import { TodoItem } from "./TodoMemo.mock";
+import { TodoItem } from "./TodoMemo.types";
+
+interface TodoMemoProps {
+  accountId?: string;
+}
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import {
   AddForm,
@@ -16,10 +20,11 @@ import {
 
 const { Title } = Typography;
 
-export function TodoMemo() {
+export function TodoMemo({ accountId }: TodoMemoProps) {
   const {
     todos,
     isLoading,
+    error,
     selectedTodo,
     editingTodo,
     isDetailModalVisible,
@@ -32,7 +37,7 @@ export function TodoMemo() {
     editTodo,
     updateTodo,
     closeModals,
-  } = useTodoMemo();
+  } = useTodoMemo({ accountId });
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -101,7 +106,7 @@ export function TodoMemo() {
   }, []);
 
   // 完了済みTODO数の計算
-  const completedCount = todos.filter((todo) => todo.completed).length;
+  const completedCount = todos.filter((todo) => todo.status === "DONE").length;
 
   // ローディング中の表示
   if (isLoading) {
