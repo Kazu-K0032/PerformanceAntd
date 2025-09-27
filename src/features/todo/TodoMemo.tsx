@@ -2,7 +2,9 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { Typography, message } from "antd";
+import { useAccount } from "@/contexts/account-context";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { CONTENT_CONFIG } from "@/constants/globals.constants";
 import { useTodoMemo } from "./useTodoMemo";
 import { TodoItem } from "./TodoMemo.types";
 import {
@@ -16,15 +18,11 @@ import {
 
 const { Title } = Typography;
 
-interface TodoMemoProps {
-  accountId?: string;
-}
-
-export function TodoMemo({ accountId }: TodoMemoProps) {
+export function TodoMemo() {
+  const { selectedAccountId } = useAccount();
   const {
     todos,
     isLoading,
-    error,
     selectedTodo,
     editingTodo,
     isDetailModalVisible,
@@ -37,7 +35,7 @@ export function TodoMemo({ accountId }: TodoMemoProps) {
     editTodo,
     updateTodo,
     closeModals,
-  } = useTodoMemo({ accountId });
+  } = useTodoMemo({ accountId: selectedAccountId });
 
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
@@ -122,7 +120,7 @@ export function TodoMemo({ accountId }: TodoMemoProps) {
           position: "relative",
         }}
       >
-        <Title level={2}>TODO管理アプリ</Title>
+        <Title level={2}>{CONTENT_CONFIG.TASKS.name}</Title>
         <LoadingSpinner tip="TODOデータを読み込み中..." />
       </div>
     );
@@ -138,7 +136,7 @@ export function TodoMemo({ accountId }: TodoMemoProps) {
         position: "relative",
       }}
     >
-      <Title level={2}>TODO管理アプリ</Title>
+      <Title level={2}>{CONTENT_CONFIG.TASKS.name}</Title>
 
       <AddForm
         newTitle={newTitle}

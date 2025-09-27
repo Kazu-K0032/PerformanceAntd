@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from "react";
 import { Account } from "@prisma/client";
 import { accountClient } from "@/lib/client-account";
 
+const SELECTED_ACCOUNT_KEY = "selectedAccountId";
+
 export const useAccountManagement = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
@@ -9,6 +11,7 @@ export const useAccountManagement = () => {
   const [selectedAccountId, setSelectedAccountId] = useState<
     string | undefined
   >(undefined);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const loadAccounts = useCallback(async () => {
     try {
@@ -28,9 +31,31 @@ export const useAccountManagement = () => {
     }
   }, []);
 
+  // ローカルストレージからアカウントIDを復元
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedAccountId = localStorage.getItem(SELECTED_ACCOUNT_KEY);
+      if (savedAccountId) {
+        setSelectedAccountId(savedAccountId);
+      }
+      setIsInitialized(true);
+    }
+  }, []);
+
   useEffect(() => {
     loadAccounts();
   }, [loadAccounts]);
+
+  // アカウントIDが変更された時にローカルストレージに保存
+  useEffect(() => {
+    if (isInitialized && typeof window !== "undefined") {
+      if (selectedAccountId) {
+        localStorage.setItem(SELECTED_ACCOUNT_KEY, selectedAccountId);
+      } else {
+        localStorage.removeItem(SELECTED_ACCOUNT_KEY);
+      }
+    }
+  }, [selectedAccountId, isInitialized]);
 
   const selectAccount = useCallback((accountId: string) => {
     setSelectedAccountId(accountId);

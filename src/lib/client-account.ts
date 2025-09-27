@@ -66,6 +66,42 @@ export class AccountClient {
       throw error;
     }
   }
+
+  /**
+   * アカウントを更新する
+   * @param id アカウントID
+   * @param accountName アカウント名
+   * @param icon アイコンURL
+   * @returns 更新されたアカウント
+   */
+  async updateAccount(
+    id: string,
+    accountName: string,
+    icon: string
+  ): Promise<AccountType> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/accounts/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountName,
+          icon,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data: GetAccountResponse = await response.json();
+      return data.account;
+    } catch (error) {
+      console.error("アカウント更新エラー:", error);
+      throw error;
+    }
+  }
 }
 
 export const accountClient = new AccountClient();

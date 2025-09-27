@@ -18,7 +18,7 @@ export function TodoList({
   onDelete,
 }: TodoListProps) {
   return (
-    <Row gutter={[16, 16]} style={{ minHeight: "400px" }}>
+    <Row gutter={[16, 16]} style={{ minHeight: "400px" }} justify="center">
       {todos.map((todo) => (
         <Col
           xs={24}
