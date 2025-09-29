@@ -11,6 +11,7 @@ import {
   clearSelectedAccountIdFromCookie,
 } from "@/lib/client-cookies";
 import { accountSelectClient } from "@/lib/client-account-select";
+import { CONTENT_CONFIG } from "@/constants/globals.constants";
 
 /**
  * アカウントプロバイダ
@@ -19,12 +20,15 @@ import { accountSelectClient } from "@/lib/client-account-select";
  */
 export function AccountProvider({ children }: AccountProviderProps) {
   const pathname = usePathname();
+  // 選択されたアカウントID
   const [selectedAccountId, setSelectedAccountId] = useState<
     string | undefined
   >(undefined);
+  // 選択されたアカウント
   const [selectedAccount, setSelectedAccount] = useState<AccountType | null>(
     null
   );
+  // 初期化フラグ
   const [isInitialized, setIsInitialized] = useState(false);
 
   // CookieからアカウントIDを復元
@@ -35,7 +39,7 @@ export function AccountProvider({ children }: AccountProviderProps) {
       console.log("復元されたアカウントID:", savedAccountId);
 
       // 新規アカウント作成ページでは選択をクリア
-      if (pathname === "/accounts/new") {
+      if (pathname === CONTENT_CONFIG.NEW.path) {
         setSelectedAccountId(undefined);
         clearSelectedAccountIdFromCookie();
       } else if (savedAccountId) {
