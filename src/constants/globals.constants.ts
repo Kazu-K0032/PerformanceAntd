@@ -2,11 +2,6 @@ import { Inter } from "next/font/google";
 
 export const SITE_TITLE = "Task App";
 export const SITE_DESCRIPTION = "Webアプリ勉強用";
-export const FAVICON_PATH_LIST = {
-  icon: "/favicon.ico",
-  shortcut: "/favicon.ico",
-  apple: "/favicon.ico",
-} as const;
 
 export const INTER_FONT = Inter({
   variable: "--font-inter",
