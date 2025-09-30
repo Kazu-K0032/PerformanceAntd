@@ -30,7 +30,7 @@ export const CONTENT_CONFIG = {
   NEW: {
     key: "new",
     name: "新規アカウント作成",
-    path: "/new",
+    path: "/accounts/new",
   },
   TASKS: {
     key: "tasks",

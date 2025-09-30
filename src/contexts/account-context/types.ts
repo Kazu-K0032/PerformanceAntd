@@ -1,3 +1,4 @@
+import React from "react";
 import { AccountType } from "@/types/account.types";
 
 export interface AccountContextType {
